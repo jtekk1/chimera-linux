@@ -1,0 +1,11 @@
+#!/bin/sh
+
+case "$1" in 
+    -v|-k)
+        exit 0
+	;;
+    *)
+        exec doas "$@"
+	;;
+esac
+
