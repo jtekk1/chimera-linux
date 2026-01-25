@@ -18,6 +18,9 @@ apk add \
 	ruby \
 	gcc \
 	meson \
-	ninja
+	ninja \
+	go \
+	lua5.4 \
+	tree-sitter-lua
 
 echo "Tools installed ..."
