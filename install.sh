@@ -1,37 +1,37 @@
-#!/bin/bash
+#!/bin/sh
 
 set +e
 
-if [ $EUID -ne 0 ]; then
-  echo "Please run as root!"
-  exit
-fi
-
-REAL_USER=${SUDO_USER:-$(whoami)}
-
 echo "Setting up Repos!"
 sleep 2
-source ./install/repos.sh
+doas ./install/repos.sh
 
 echo "Setting up Core items!"
 sleep 2
-source ./install/core.sh
+doas ./install/core.sh
 
 echo "Setting up system"
 sleep 2
-source ./install/cli.sh
-source ./install/tuis.sh
-source ./install/tools.sh
-source ./install/fonts.sh
-source ./install/guis.sh
-source ./install/extras.sh
+doas ./install/cli.sh
+doas ./install/tuis.sh
+doas ./install/tools.sh
+doas ./install/fonts.sh
+doas ./install/guis.sh
+doas ./install/extras.sh
 
-echo "Setting up seatd and dbus!"
-sleep 2
-source ./install/services.sh
+# echo "Setting up seatd and dbus!"
+# sleep 2
+# ./install/services.sh
 
-xbps-reconfigure -fa
+echo "Setting up Desktop"
+doas ./install/dev-tools.sh
+doas ./install/desktop-env.sh
+doas ./install/DEs/mangowc.sh
+doas ./install/hardware/intel.sh
+
+doas update-initramfs -u -k all
+./install/apps/superfile-install.sh
 
 echo "DONE!!!"
-echo "Welcome to the VOID!"
+echo "Welcome to the CHIMERA!"
 sleep 2

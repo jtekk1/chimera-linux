@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 set +e
 
@@ -7,7 +7,7 @@ if [ $EUID -ne 0 ]; then
   exit
 fi
 
-apk add \
+apk add -lu --interactive=no \
     chimera-repo-user
     #chimera-repo-contrib
 

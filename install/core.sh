@@ -7,8 +7,10 @@ if [ $EUID -ne 0 ]; then
   exit
 fi
 
-apk add \
+apk add --interactive=no \
   base-devel \
+  base-full \
+  bash \
   brightnessctl \
   chrony \
   curl \
@@ -21,6 +23,6 @@ apk add \
   tea \
   tmux \
   upower \
-  xdg-user-dirs \
+  xdg-user-dirs 
 
 echo "Core System items are now installed..."
