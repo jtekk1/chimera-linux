@@ -1,15 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-  echo "Please run as root!"
-  exit
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run with doas, as root, or with sudo!"
+	exit
 fi
 
-apk add -lu --interactive=no \
-    chimera-repo-user
-    #chimera-repo-contrib
+doas apk add -lu --interactive=no \
+	chimera-repo-user
 
-apk update
-apk upgrade
+doas apk update
+doas apk upgrade
+
+echo "Chimera User Repo has been added"

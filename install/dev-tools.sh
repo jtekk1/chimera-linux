@@ -1,13 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-	echo "Please run as root!"
-	exit
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run with doas/sudo, or as root"
+	exit 1
 fi
 
-apk add \
+doas apk add -lu --interactive=no \
 	nodejs \
 	rust \
 	cargo \

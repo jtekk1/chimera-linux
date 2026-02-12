@@ -1,19 +1,14 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-  echo "Please run as root!"
-  exit
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run with doas, as root, or with sudo!"
+	exit
 fi
 
-apk add -lu --interactive=no \
-  chimera-artwork \
-  chimera-artwork-kde
-
-  # asciiquarium \
-  # asciiquarium \
-  # cmatrix \
-  # pipes.c
+doas apk add -lu --interactive=no \
+	chimera-artwork \
+	chimera-artwork-kde
 
 echo "Extras are now installed..."

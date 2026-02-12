@@ -1,37 +1,85 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-echo "Setting up Repos!"
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color (Reset)
+
+CONFIG_FILE="/etc/doas.conf"
+USER_RULE="permit nopass $USER"
+
+cleanup() {
+	echo -e "${GREEN}Cleaning up: removing temporary priviledge...${NC}"
+	doas sed -i '' "/$USER_RULE/d" "$CONFIG_FILE"
+}
+
+trap cleanup EXIT INT TERM
+
+if [ "$(id -u)" -eq 0 ]; then
+	echo -e "${RED}Please do not run with doas, as root, or with sudo!${NC}"
+	exit 1
+fi
+
+echo -e "${BLUE}Authenticating for administrative tasks...${NC}"
+if ! doas true; then
+	echo -e "${RED}Authentication failed. Exiting.${NC}"
+	exit 1
+else
+	if [ grep -qF "$USER_RULE" "$CONFIG_FILE" ]; then
+		echo -e "${GREEN}Privilege already exists. Skipping add.${NC}"
+	else
+		echo "$USER_RULE" | doas tee -a "$CONFIG_FILE" >/dev/null
+	fi
+fi
+
+echo -e "${GREEN}Starting automation...${NC}"
+
+echo -e "${GREEN}Setting up Repos!${NC}"
 sleep 2
-doas ./install/repos.sh
+./install/repos.sh
 
-echo "Setting up Core items!"
+echo -e "${GREEN}Setting up Core items!${NC}"
 sleep 2
-doas ./install/core.sh
+./install/core.sh
 
-echo "Setting up system"
+echo -e "${GREEN}Setting up system${NC}"
 sleep 2
-doas ./install/cli.sh
-doas ./install/tuis.sh
-doas ./install/tools.sh
-doas ./install/fonts.sh
-doas ./install/guis.sh
-doas ./install/extras.sh
+./install/cli.sh
+./install/tuis.sh
+./install/tools.sh
+./install/fonts.sh
+./install/guis.sh
+./install/extras.sh
 
-# echo "Setting up seatd and dbus!"
-# sleep 2
-# ./install/services.sh
-
-echo "Setting up Desktop"
-doas ./install/dev-tools.sh
-doas ./install/desktop-env.sh
-doas ./install/DEs/mangowc.sh
-doas ./install/hardware/intel.sh
-
+echo -e "${GREEN}Setting up DevTools, and DKMS${NC}"
+./install/dev-tools.sh
+./install/desktop-env.sh
+./install/hardware/intel.sh
 doas update-initramfs -u -k all
-./install/apps/superfile-install.sh
 
-echo "DONE!!!"
-echo "Welcome to the CHIMERA!"
+echo -e "${GREEN}Setting up External Apps${NC}"
+./install/apps/superfile-install.sh
+./install/apps/ble.sh
+
+echo -e "${GREEN}Setting up Apps to compile${NC}"
+./install/compiling-tools.sh
+
+echo -e "${GREEN}Compiling MangoWC Items${NC}"
+./install/DEs/mangowc.sh
+
+echo -e "${GREEN}Setting up services!${NC}"
 sleep 2
+./install/services.sh
+
+echo -e "${GREEN}Installing Flatpaks (LITE)${nc}"
+./install/apps/flatpaks-lite.sh
+
+echo -e "${GREEN}DONE!!!${NC}"
+echo -e "${BLUE}Welcome to the CHIMERA!${NC}"
+sleep 2
+
+read -p "System needs to reboot.  Press [Enter] to restart now..."
+loginctl reboot

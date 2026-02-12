@@ -1,20 +1,28 @@
 #!/bin/bash
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-  echo "Please run as root!"
-  exit
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run as root!"
+	exit 1
 fi
 
-REAL_USER=${SUDO_USER:-$(whoami)}
+doas usermod -aG wheel,audio,video,plugdev,video,network,users jtekk
 
-usermod -aG _seatd $REAL_USER
-ln -s /etc/sv/acpid /var/service/
-ln -s /etc/sv/chronyd /var/service/
-ln -s /etc/sv/dbus /var/service/
-ln -s /etc/sv/dhcpcd /var/service/
-ln -s /etc/sv/seatd /var/service/
-ln -s /etc/sv/bluetoothd /var/service/
-ln -s /etc/sv/swayosd-libinput-backend /var/service/
-ln -s /etc/sv/NetworkManager /var/service/
-ln -s /etc/sv/sshd /var/service/
+# Pipewire reconfig of dinit with turnstile to avoid greetd user also launching these services
+doas apk add '!pipewire-dinit-link' '!wireplumber-dinit-link'
+
+if cat /etc/greetd/config.toml | grep "tuigreet" >/dev/null 2>&1; then
+	echo "GreetD previously set for TUIGREET"
+else
+	doas cp ./install/DEs/tuigreet-config.toml /etc/greetd/config.toml
+	echo "GREETD config has been set for TUIGREET"
+fi
+
+SERVICES="iwd dhcpcd greetd"
+for SERVICE in $SERVICES; do
+	if doas dinitctl status $SERVICE >/dev/null 2>&1; then
+		echo "$SERVICE was already enabled"
+	else
+		doas dinitctl enable $SERVICE
+	fi
+done

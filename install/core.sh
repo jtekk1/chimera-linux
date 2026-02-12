@@ -1,28 +1,27 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-  echo "Please run as root!"
-  exit
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run with doas, as root, or with sudo!"
+	exit
 fi
 
-apk add --interactive=no \
-  base-devel \
-  base-full \
-  bash \
-  brightnessctl \
-  chrony \
-  curl \
-  git \
-  github-cli \
-  linux-stable \
-  linux-stable-devel \
-  networkmanager \
-  tailscale \
-  tea \
-  tmux \
-  upower \
-  xdg-user-dirs 
+doas apk add -lu --interactive=no \
+	base-devel \
+	base-full \
+	bash \
+	brightnessctl \
+	chrony \
+	curl \
+	git \
+	github-cli \
+	linux-stable \
+	linux-stable-devel \
+	tailscale \
+	tea \
+	tmux \
+	upower \
+	xdg-user-dirs
 
 echo "Core System items are now installed..."

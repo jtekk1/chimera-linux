@@ -1,29 +1,23 @@
-#!/bin/sh
+#!/bin/bash
 
-set +e
+set -e
 
-if [ $EUID -ne 0 ]; then
-	echo "Please run as root!"
+if [ "$(id -u)" -eq 0 ]; then
+	echo "Please do not run with doas, as root, or with sudo!"
 	exit
 fi
 
-apk add -lu --interactive=no \
-    btop \
-    dialog \
-    dust \
-    fastfetch \
-    gdu \
-    glow \
-    impala \
-    lazygit \
-    lynx \
-    ncdu \
-    neovim 
-
-# bluetui \
-# luarocks \
-# spotify-tui \
-# tldr \
-# wiremix
+doas apk add -lu --interactive=no \
+	btop \
+	dialog \
+	dust \
+	fastfetch \
+	gdu \
+	glow \
+	impala \
+	lazygit \
+	lynx \
+	ncdu \
+	neovim
 
 echo "TUIs are now installed..."
