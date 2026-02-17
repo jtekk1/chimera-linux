@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apk add -lu --interactive=no \
+doas apk add -lu --interactive=no \
   gamescope \
   steam-devices-udev \
   protontricks

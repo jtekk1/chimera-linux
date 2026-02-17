@@ -14,7 +14,7 @@ doas apk add '!pipewire-dinit-link' '!wireplumber-dinit-link'
 if cat /etc/greetd/config.toml | grep "tuigreet" >/dev/null 2>&1; then
 	echo "GreetD previously set for TUIGREET"
 else
-	doas cp ./install/DEs/tuigreet-config.toml /etc/greetd/config.toml
+	doas cp ./install/services/tuigreet-config.toml /etc/greetd/config.toml
 	echo "GREETD config has been set for TUIGREET"
 fi
 
@@ -24,5 +24,14 @@ for SERVICE in $SERVICES; do
 		echo "$SERVICE was already enabled"
 	else
 		doas dinitctl enable $SERVICE
+	fi
+done
+
+USER_SERVICES="kanshi pipewire pipewire-pulse pipewire waybar swayosd-server swayosd-libinput-backend mako"
+for US in $USER_SERVICES; do
+	if dinitctl status $US >/dev/null 2>&1; then
+		echo "$US was already enabled..."
+	else
+		dinitctl enable $US
 	fi
 done

@@ -10,7 +10,6 @@ fi
 doas apk add -lu --interactive=no \
 	blueman \
 	bluez \
-	chromium \
 	cliphist \
 	flatpak \
 	foot \
@@ -29,7 +28,6 @@ doas apk add -lu --interactive=no \
 	starship \
 	swaybg \
 	swayidle \
-	swaylock \
 	swww \
 	tuigreet \
 	wayland-utils \

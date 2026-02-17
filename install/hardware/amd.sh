@@ -2,12 +2,12 @@
 
 set +e
 
-if [ $EUID -ne 0 ]; then
+if [ ! $EUID -ne 0 ]; then
   echo "Please run as root!"
   exit
 fi
 
-apk add -lu --interactive=no \
+doas apk add -lu --interactive=no \
   vulkan-loader \
   vulkan-loader-devel \
   vulkan-headers \
