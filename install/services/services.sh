@@ -28,7 +28,7 @@ for SERVICE in $SERVICES; do
 	fi
 done
 
-USER_SERVICES="kanshi pipewire pipewire-pulse pipewire waybar swayosd-server swayosd-libinput-backend mako"
+USER_SERVICES="kanshi pipewire pipewire-pulse pipewire waybar swayosd-server swayosd-libinput-backend mako swayidle xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-wlr"
 for US in $USER_SERVICES; do
 	if dinitctl status $US >/dev/null 2>&1; then
 		echo "$US was already enabled..."

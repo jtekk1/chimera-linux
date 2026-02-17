@@ -49,63 +49,64 @@ else
 fi
 
 echo -e "${GREEN}Setting up Repos!${NC}"
-./install/core/repos.sh 2>/dev/null
+./install/core/repos.sh >/dev/null
 
 echo -e "${GREEN}Setting up Core items!${NC}"
-./install/core/core.sh 2>/dev/null
+./install/core/core.sh >/dev/null
 
 echo -e "${GREEN}Setting up Cli items${NC}"
-./install/system/cli.sh 2>/dev/null
+./install/system/cli.sh >/dev/null
 
 echo -e "${GREEN}Setting up TUIs${NC}"
-./install/system/tuis.sh 2>/dev/null
+./install/system/tuis.sh >/dev/null
 
 echo -e "${GREEN}Setting up Tools${NC}"
-./install/system/tools.sh 2>/dev/null
+./install/system/tools.sh >/dev/null
 
 echo -e "${GREEN}Setting up Fonts${NC}"
-./install/system/fonts.sh 2>/dev/null
+./install/system/fonts.sh >/dev/null
 
 echo -e "${GREEN}Setting up GUIs${NC}"
-./install/system/guis.sh 2>/dev/null
+./install/system/guis.sh >/dev/null
 
 echo -e "${GREEN}Setting up Extras${NC}"
-./install/system/extras.sh 2>/dev/null
+./install/system/extras.sh >/dev/null
 
 echo -e "${GREEN}Setting up DevTools${NC}"
-./install/tools/dev-tools.sh 2>/dev/null
+./install/tools/dev-tools.sh >/dev/null
 
 echo -e "${GREEN}Setting up compiling tools${NC}"
-./install/tools/compiling-tools.sh 2>/dev/null
+./install/tools/compiling-tools.sh >/dev/null
 
 echo -e "${GREEN}Setting up desktop env${NC}"
-./install/desktop/desktop-env.sh 2>/dev/null
+./install/desktop/desktop-env.sh >/dev/null
 
 echo -e "${GREEN}Compiling MangoWC Items${NC}"
-./install/desktop/mangowc.sh 2>/dev/null
+./install/desktop/mangowc.sh >/dev/null
 
 echo -e "${GREEN}Setting up SuperFile and Ble.sh Apps${NC}"
-./install/apps/superfile-install.sh 2>/dev/null
-./install/apps/ble.sh 2>/dev/null
+./install/apps/superfile-install.sh >/dev/null
+./install/apps/ble.sh >/dev/null
 
-echo -e "${GREEN}Installing Flatpaks (LITE)${nc}"
-./install/apps/flatpaks-lite.sh 2>/dev/null
+echo -e "${GREEN}Installing Flatpaks (LITE)${NC}"
+./install/apps/flatpaks-lite.sh >/dev/null
 
-if $1 == "deepspace"; then
-  echo -e "${GREEN}Setting up Deepspace drivers!"
-  ./install/hardware/amd.sh 2>/dev/null
-  echo -e "${GREEN}Setting up Deepspace for gaming!"
-  ./install/gaming/gaming.sh 2>/dev/null
-  ./install/flatpaks.sh 2>/dev/null
-elif $1 == "thinkpad"; then
-  echo -e "${GREEN}Setting up Thinkpad drivers" 
+if [ "$1" == "deepspace" ]; then
+  echo -e "${GREEN}Setting up Deepspace drivers!${NC}"
+  ./install/hardware/amd.sh >/dev/null
+  echo -e "${GREEN}Setting up Deepspace for gaming!${NC}"
+  ./install/gaming/gaming.sh >/dev/null
+  ./install/gaming/flatpaks.sh >/dev/null
+elif [ "$1" == "thinkpad" ]; then
+  echo -e "${GREEN}Setting up Thinkpad drivers${NC}" 
   ./install/hardware/intel.sh
+fi
 
 echo -e "${GREEN}Setting up services!${NC}"
-./install/services.sh 2>/dev/null
+./install/services/services.sh >/dev/null
 
 echo -e "${GREEN}Updating initramfs${NC}"
-doas update-initramfs -u -k all 2>/dev/null
+doas update-initramfs -u -k all >/dev/null
 
 echo -e "${GREEN}DONE!!!${NC}"
 echo -e "${BLUE}Welcome to the CHIMERA!${NC}"
