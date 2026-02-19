@@ -13,39 +13,39 @@ USER_RULE="permit nopass $USER"
 
 case $1 in
 "deepspace" | "thinkpad")
-	echo "Setting PC_HOST as $1"
-	PC_HOST=$1
-	;;
+  echo "Setting PC_HOST as $1"
+  PC_HOST=$1
+  ;;
 
 *)
-	echo "This only supports 'deepspace' or 'thinkpad'. Exiting!"
-	exit 1
-	;;
+  echo "This only supports 'deepspace' or 'thinkpad'. Exiting!"
+  exit 1
+  ;;
 esac
 
 cleanup() {
-	echo -e "${GREEN}Cleaning up: removing temporary priviledge...${NC}"
-	doas sed -i '' "/$USER_RULE/d" "$CONFIG_FILE"
+  echo -e "${GREEN}Cleaning up: removing temporary priviledge...${NC}"
+  doas sed -i '' "/$USER_RULE/d" "$CONFIG_FILE"
 }
 
 trap cleanup EXIT INT TERM
 
 if [ "$(id -u)" -eq 0 ]; then
-	echo -e "${RED}Please do not run with doas, as root, or with sudo!${NC}"
-	exit 1
+  echo -e "${RED}Please do not run with doas, as root, or with sudo!${NC}"
+  exit 1
 fi
 
 echo -e "${BLUE}Authenticating for administrative tasks...${NC}"
 if ! doas true; then
-	echo -e "${RED}Authentication failed. Exiting.${NC}"
-	exit 1
+  echo -e "${RED}Authentication failed. Exiting.${NC}"
+  exit 1
 else
   echo -e "${BLUE}Starting Tekk's Chimera Installer Script...${NC}"
-	if [ grep -qF "$USER_RULE" "$CONFIG_FILE" ]; then
-		echo -e "${GREEN}Privilege already exists. Skipping add.${NC}"
-	else
-		echo "$USER_RULE" | doas tee -a "$CONFIG_FILE" >/dev/null
-	fi
+  if grep -qF "$USER_RULE" "$CONFIG_FILE"; then
+    echo -e "${GREEN}Privilege already exists. Skipping add.${NC}"
+  else
+    echo "$USER_RULE" | doas tee -a "$CONFIG_FILE" >/dev/null
+  fi
 fi
 
 echo -e "${GREEN}Setting up Repos!${NC}"
@@ -98,7 +98,7 @@ if [ "$1" == "deepspace" ]; then
   ./install/gaming/gaming.sh >/dev/null
   ./install/gaming/flatpaks.sh >/dev/null
 elif [ "$1" == "thinkpad" ]; then
-  echo -e "${GREEN}Setting up Thinkpad drivers${NC}" 
+  echo -e "${GREEN}Setting up Thinkpad drivers${NC}"
   ./install/hardware/intel.sh
 fi
 
