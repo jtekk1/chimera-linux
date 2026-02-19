@@ -11,12 +11,15 @@ doas usermod -aG wheel,input,plugdev,users jtekk
 # Pipewire reconfig of dinit with turnstile to avoid greetd user also launching these services
 doas apk add '!pipewire-dinit-link' '!wireplumber-dinit-link'
 
-# if cat /etc/greetd/config.toml | grep "tuigreet" >/dev/null 2>&1; then
-# 	echo "GreetD previously set for TUIGREET"
-# else
-# 	doas cp ./install/services/tuigreet-config.toml /etc/greetd/config.toml
-# 	echo "GREETD config has been set for TUIGREET"
-# fi
+# Without this, dbus gives an error.
+doas cp -v ./org.erikreider.swayosd.conf /usr/share/dbus-1/system.d/
+
+if cat /etc/greetd/config.toml | grep "tuigreet" >/dev/null 2>&1; then
+  echo "GreetD previously set for TUIGREET"
+else
+  doas cp ./install/services/tuigreet-config.toml /etc/greetd/config.toml
+  echo "GREETD config has been set for TUIGREET"
+fi
 
 # add greetd whenever ready
 SERVICES="iwd dhcpcd"
