@@ -11,8 +11,9 @@ flatpak install --user -y \
   md.obsidian.Obsidian \
   org.dupot.easyflatpak \
   com.rafaelmardojai.Blanket \
-  org.gimp.GIMP \
-  io.github.nate_xyz.Conjure \
   org.inkscape.Inkscape \
   com.obsproject.Studio \
-  fr.handbrake.ghb
+  fr.handbrake.ghb \
+  flathub us.zoom.Zoom
+#   org.gimp.GIMP \
+#  io.github.nate_xyz.Conjure \
