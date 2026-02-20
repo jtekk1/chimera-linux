@@ -102,14 +102,15 @@ elif [ "$1" == "thinkpad" ]; then
   ./install/hardware/intel.sh
 fi
 
-echo -e "${GREEN}Setting up services!${NC}"
-./install/services/services.sh >/dev/null
-
 echo -e "${GREEN}Updating initramfs${NC}"
 doas update-initramfs -u -k all >/dev/null
 
 echo -e "${GREEN}DONE!!!${NC}"
 echo -e "${BLUE}Welcome to the CHIMERA!${NC}"
+
+echo -e "${GREEN}Setting up services!  A restart may be needed${NC}"
+sleep 5
+./install/services/services.sh >/dev/null
 
 read -p "System needs to reboot.  Press [Enter] to restart now..."
 loginctl reboot
