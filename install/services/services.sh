@@ -12,7 +12,7 @@ doas usermod -aG wheel,input,plugdev,users jtekk
 doas apk add '!pipewire-dinit-link' '!wireplumber-dinit-link'
 
 # Without this, dbus gives an error.
-doas cp -v ./org.erikreider.swayosd.conf /usr/share/dbus-1/system.d/
+doas cp -v ./install/services/org.erikreider.swayosd.conf /usr/share/dbus-1/system.d/
 
 if cat /etc/greetd/config.toml | grep "tuigreet" >/dev/null 2>&1; then
   echo "GreetD previously set for TUIGREET"
@@ -22,7 +22,7 @@ else
 fi
 
 # add greetd whenever ready
-SERVICES="iwd dhcpcd"
+SERVICES="iwd dhcpcd greetd"
 for SERVICE in $SERVICES; do
   if doas dinitctl status $SERVICE >/dev/null 2>&1; then
     echo "$SERVICE was already enabled"
@@ -31,7 +31,7 @@ for SERVICE in $SERVICES; do
   fi
 done
 
-USER_SERVICES="kanshi pipewire pipewire-pulse pipewire waybar swayosd-server swayosd-libinput-backend mako swayidle "
+USER_SERVICES="kanshi pipewire pipewire-pulse pipewire waybar swayosd-server swayosd-libinput-backend mako swayidle"
 for US in $USER_SERVICES; do
   if dinitctl status $US >/dev/null 2>&1; then
     echo "$US was already enabled..."
